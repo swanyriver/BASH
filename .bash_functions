@@ -1,0 +1,7 @@
+function gitty {
+	git add -A :/ && git commit -m "${1}" && git push
+}
+
+function MYmkdir {
+	mkdir $1 && cd $1
+}
