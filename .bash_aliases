@@ -10,4 +10,7 @@ alias syslog='watch -d dmesg | tail'
 
 alias mflip='sshfs swansonb@flip.engr.oregonstate.edu://nfs/stak/students/s/swansonb ~/FLIP'
 
-#alias mkdir="MYmkdir"
+alias umflip='fusermount -u ~/FLIP'
+
+alias clipboard='xclip -sel clip'
+
