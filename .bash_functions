@@ -5,3 +5,6 @@ function gitty {
 function MYmkdir {
 	mkdir $1 && cd $1
 }
+function public {
+	sudo chmod -c 644 $1;
+}
