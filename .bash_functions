@@ -8,3 +8,6 @@ function MYmkdir {
 function public {
 	sudo chmod -c 644 $1;
 }
+function ghelp {
+	$1 --help | grep -i $2;
+} 
