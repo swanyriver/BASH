@@ -1,0 +1,19 @@
+.bashrc
+
+if [ -f ~/BASH/.bash_aliases ]; then
+    . ~/BASH/.bash_aliases
+fi
+
+#brandon Function definitions
+if [ -f ~/BASH/.bash_functions ]; then
+    . ~/BASH/.bash_functions
+fi
+
+
+
+.profile
+
+# set PATH so it includes my scripts
+if [ -d "$HOME/BASH" ] ; then
+    PATH="$HOME/BASH:$PATH"
+fi

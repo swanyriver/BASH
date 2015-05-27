@@ -1,0 +1,83 @@
+#!/bin/bash
+
+#Print applicable error messages from Github server
+function showErrors {
+python <<END_OF_PYTHON
+import json  
+response = json.load(open('.searchJSON'))
+
+print response['message']
+if 'errors' in response:
+  for error in response['errors']:
+    if 'message' in error: print error['message']
+END_OF_PYTHON
+}
+
+#create JSON object and print number of search results
+function getNumResults {
+
+python <<END_OF_PYTHON
+import json
+response = json.load(open('.searchJSON'))
+print response['total_count']
+END_OF_PYTHON
+
+}
+
+#Print up to first 10 search results repo name
+function getSelections {
+python <<END_OF_PYTHON
+import json
+response = json.load(open('.searchJSON'))
+max = int(response['total_count'])
+if max>10:max=10
+for i in range(max):
+  print "[" , i , "] " , response['items'][i]['name'] 
+END_OF_PYTHON
+}
+
+#output clone url specified by index $1
+function getCloneUrl {
+
+python <<END_OF_PYTHON
+import json
+response = json.load(open('.searchJSON'))
+print response['items'][$1]['ssh_url']
+END_OF_PYTHON
+
+}
+
+#set up search query and api url
+username="swanyriver"
+url="https://api.github.com/search/repositories"
+search="?q=$1+user:${username}&sort=updated"
+
+#make call to Github search API
+htresp=$(curl --write-out %{http_code} --output .searchJSON ${url}${search} )
+
+if [[ $htresp == 200 ]] ; then
+  #sucessfull query, assert at least 1 result
+  numResults=$(getNumResults)
+  if [[ $numResults == 0 ]] ; then
+    echo "no results returned"
+    rm .searchJSON
+    exit 1
+  fi
+
+  #display returned repos and promt for choice
+  getSelections
+  echo -n "Wich would you like to clone:"
+  read selected
+  
+  #clone selected repository
+  git clone $(getCloneUrl $selected)
+
+  rm .searchJSON
+  exit 0
+else
+  #display error message, exit in failure
+  echo "FAILED: github response code $htresp"
+  showErrors
+  rm .searchJSON
+  exit 1
+fi
