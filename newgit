@@ -38,11 +38,17 @@ if [[ $htresp == 201 ]] ; then
   #Get remote repository URL
   cloneurl=$(geturl)
   rm .jsongit
+
+  if [[ ! $3 ]] ; then
+    commitmsg="first commit"
+  else
+    commitmsg=$3
+  fi
   
   #Set up Local repository for Push/Pull
   git init
   git add -A :/
-  git commit -m "first commit"
+  git commit -m "$commitmsg"
   git remote add origin $cloneurl
   git push -u origin master
   exit 0
