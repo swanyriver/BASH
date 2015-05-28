@@ -24,7 +24,7 @@ END_OF_PYTHON
 
 }
 
-auth="swanyrivertesting"
+auth="swanyriver"
 json="{\"name\":\"$1\", \"description\":\"$2\"}"
 url="https://api.github.com/user/repos"
 
