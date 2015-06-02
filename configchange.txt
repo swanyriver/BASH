@@ -13,7 +13,7 @@ fi
 
 .profile
 
-# set PATH so it includes my scripts
+# set PATH so it includes my scripts at end
 if [ -d "$HOME/BASH" ] ; then
     PATH="$PATH:$HOME/BASH"
 fi
