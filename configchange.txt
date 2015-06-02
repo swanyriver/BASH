@@ -15,5 +15,5 @@ fi
 
 # set PATH so it includes my scripts
 if [ -d "$HOME/BASH" ] ; then
-    PATH="$HOME/BASH:$PATH"
+    PATH="$PATH:$HOME/BASH"
 fi
