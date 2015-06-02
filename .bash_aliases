@@ -14,3 +14,4 @@ alias umflip='fusermount -u ~/FLIP'
 
 alias clipboard='xclip -sel clip'
 
+alias findtabs="grep -P '\t' *"
