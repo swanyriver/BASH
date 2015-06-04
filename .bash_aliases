@@ -15,3 +15,5 @@ alias umflip='fusermount -u ~/FLIP'
 alias clipboard='xclip -sel clip'
 
 alias findtabs="grep -P '\t' *"
+
+alias rapache="sudo service apache2 restart"
