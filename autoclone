@@ -47,23 +47,20 @@ END_OF_PYTHON
 
 }
 
-if [[ $1 == "-p" ]] ; then
-    search=$2
-else
-    search=$1
-fi
-
-#set up search query and api url
 username="swanyriver"
+
+if [[ $1 == "-p" ]] ; then
+    auth="-u $username"
+    shift
+fi
+    
+#set up search query and api url
+
 url="https://api.github.com/search/repositories"
-search="?q=$search+user:${username}&sort=updated"
+search="?q=$1+user:${username}&sort=updated"
 
 #make call to Github search API
-if [[ $1 == "-p" ]] ; then
-    htresp=$(curl -u "$username" --write-out %{http_code} --output .searchJSON ${url}${search} )
-else
-    htresp=$(curl --write-out %{http_code} --output .searchJSON ${url}${search} )
-fi
+htresp=$(curl $auth --write-out %{http_code} --output .searchJSON ${url}${search} )
 
 if [[ $htresp == 200 ]] ; then
   #sucessfull query, assert at least 1 result

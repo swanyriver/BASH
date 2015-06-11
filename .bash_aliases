@@ -19,5 +19,7 @@ alias findtabs="grep -P '\t' *"
 
 alias rapache="sudo service apache2 restart"
 
-function geditb { gedit $@ & >/dev/null 2>/dev/null}
-alias gedit='geditb'
+function geditb { gedit $@ & >/dev/null 2>/dev/null;};
+alias gedit="geditb"
+alias allfunctions="declare -f"
+

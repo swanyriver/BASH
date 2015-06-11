@@ -9,7 +9,9 @@ function public {
 	chmod -c 644 $1;
 }
 function ghelp {
-	$1 --help | grep -i $2;
+    prog=$1;
+    shift;
+    $prog --help | grep $@;
 } 
 
 
