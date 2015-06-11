@@ -11,7 +11,7 @@ function public {
 function ghelp {
     prog=$1;
     shift;
-    $prog --help | grep $*;
+    $prog --help | grep $*; | less -R
 } 
 
 
