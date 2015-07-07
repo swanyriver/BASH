@@ -1,15 +1,19 @@
 .bashrc
 
+#MY ALIASES
 if [ -f ~/BASH/.bash_aliases ]; then
     . ~/BASH/.bash_aliases
 fi
 
-#brandon Function definitions
+#MY FUNCTIONS
 if [ -f ~/BASH/.bash_functions ]; then
     . ~/BASH/.bash_functions
 fi
 
-
+#MY WELCOME
+if [ -f ~/BASH/welcome.sh ]; then
+    . ~/BASH/welcome.sh
+fi
 
 .profile
 
