@@ -23,3 +23,5 @@ function geditb { gedit $@ & > /dev/null 2>&1;};
 alias gedit="geditb"
 alias allfunctions="declare -f"
 
+alias sonid='ssh swansonb@shell.onid.oregonstate.edu'
+
