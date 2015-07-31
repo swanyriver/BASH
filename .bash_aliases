@@ -25,3 +25,6 @@ alias allfunctions="declare -f"
 
 alias sonid='ssh swansonb@shell.onid.oregonstate.edu'
 
+alias stapp='ssh -i ~/CRED/skilltapp.pem ubuntu@ec2-52-24-190-135.us-west-2.compute.amazonaws.com'
+
+
