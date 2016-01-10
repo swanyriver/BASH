@@ -14,4 +14,6 @@ function ghelp {
     $prog --help | grep $* --color=always | less -R
 } 
 
-
+function kindle {
+    ebook-covert "$1" "$1.mobi"
+}
