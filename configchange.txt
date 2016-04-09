@@ -21,3 +21,10 @@ fi
 if [ -d "$HOME/BASH" ] ; then
     PATH="$PATH:$HOME/BASH"
 fi
+
+export PATH="$PATH:/home/brandon/google_appengine"
+
+if [ -f "$HOME/BASH/.export" ]; then
+    . $HOME/BASH/.export
+fi
+
