@@ -15,5 +15,5 @@ function ghelp {
 } 
 
 function kindle {
-    ebook-covert "$1" "$1.mobi"
+    ebook-convert "$1" "$1.mobi"
 }
