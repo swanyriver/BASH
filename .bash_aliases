@@ -2,8 +2,8 @@ alias gitlibs="git clone git@github.com:swanyriver/SwansonObjects.git && git clo
 alias flip="ssh swansonb@flip2.engr.oregonstate.edu"
 #alias gitty="git add -A && git commit && git push"
 
-#alias get="sudo apt-get install"
-alias get="sudo aptitude install"
+alias get="sudo apt-get install"
+#alias get="sudo aptitude install"
 
 alias phperr="tail -f //var/log/apache2/error.log"
 
@@ -14,6 +14,9 @@ alias mflip='sshfs swansonb@flip.engr.oregonstate.edu://nfs/stak/students/s/swan
 alias umflip='fusermount -u ~/FLIP'
 
 alias clipboard='xclip -sel clip'
+alias getclipboard='xclip -selection clipboard -o'
+alias unreturn="getclipboard | tr --delete '\n' | clipboard"
+
 
 alias findtabs="grep -P '\t' *"
 
