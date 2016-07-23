@@ -17,3 +17,7 @@ function ghelp {
 function kindle {
     ebook-convert "$1" "$1.mobi"
 }
+
+function flipnum {
+    ssh swansonb@flip${1}.engr.oregonstate.edu
+}
