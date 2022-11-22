@@ -1,0 +1,117 @@
+function adbDeviceNames {
+  adb devices | grep -Pe '\t(device|emulator)' | cut -f 1
+}
+
+function alladb {
+  for d in $(adbDeviceNames); do
+    adb -s $d $@
+  done
+}
+
+# usage adb-screenshot_ filename(.png) [device]
+function adb-screenshot_() {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply screenshot name"
+    return
+  fi
+
+  if [ $numberOfArguments -lt 2 ]; then
+    for d in $(adbDeviceNames); do
+      header "recursing to adb-screenshot_ $1 $d"
+      adb-screenshot_ $1 $d
+    done
+  else
+    device=$2
+    device_name=$(get-adb-name $device)
+    prefix=${device_name:-$device}
+    filename="${prefix}__${1}.png"
+    echo "Capturing device: $device $device_name filename: $filename"
+    # note redir because providing filename saves it on device
+    adb -s $device shell screencap -p > $filename
+  fi
+}
+
+# Safe, ensure no overwrites of files
+function adb-screenshot() {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply screenshot name"
+    return
+  fi
+
+  if [[ ! -z $(fd --max-depth=1 $1) ]]; then
+    echo "HALTED: screenshots with that name already exist";
+    return 1
+  fi
+
+  adb-screenshot_ $@
+
+  fd --max-depth=1 $1
+}
+
+function get-adb-name {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply device name"
+    return
+  fi
+  device=$1
+
+  adb -s $device shell "cat /data/name.txt" 2>/dev/null
+}
+
+function set-adb-name {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 2 ]; then
+    echo "must supply: <device name> <moniker>"
+    return
+  fi
+  device=$1
+  name=$2
+
+  adb -s $device shell "echo '$name' > /data/name.txt"
+}
+
+function list-adb-names {
+ for d in $(adbDeviceNames); do echo $d $(get-adb-name $d); done
+}
+
+function adbNameToDev {
+  grep "\b${1}\b" <( list-adb-names ) | cut -f 1 -d " "
+}
+
+function adbDevToName {
+  grep "\b${1}\b" <( list-adb-names ) | cut -f 2 -d " "
+}
+
+function adbByName {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply device name; see output of: `list-adb-names`"
+    return
+  fi
+  device="$(adbNameToDev "$1")"
+  shift
+  adb -s $device "$@"
+}
+
+function adbScreenToStdout {
+  numberOfArguments=$#
+  if [ $numberOfArguments -ge 1 ]; then
+    device=$1
+  elif [[ $(adbDeviceNames | wc -l) -eq 1  ]]; then
+    device=$(adbDeviceNames)
+  else
+    device=$(list-adb-names | fzy | cut -f 1 -d " ")
+  fi
+  adb -s $device shell screencap -p
+}
+
+function adbCompare {
+  if [ $numberOfArguments -lt 2 ]; then
+    echo "must supply 2 device names; see output of: 'adb devices'"
+    return
+  fi
+  compare png:<(adbScreenToStdout $(adbNameToDev $1)) png:<(adbScreenToStdout $(adbNameToDev $2)) png:-
+}

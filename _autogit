@@ -1,0 +1,104 @@
+alias gl="git log --format=oneline"
+alias gs="git status"
+
+function gitty {
+  git add -A :/ && git commit -m "${1}"
+}
+
+function gatty {
+  git add -A :/ && git commit --amend
+}
+
+function gnatty {
+  git add -A :/ && git commit --amend --no-edit
+}
+
+function _git_branch {
+  git branch | grep \* | cut -d ' ' -f2
+}
+
+# Condense a branch of changes from main into a single commit, and repeat process after further dev on multi-commit branch
+function gritty {
+  original_branch=$(_git_branch)
+  squash_branch="${original_branch}_AUTO_SQUASH"
+
+  # check if branch already exists
+  if git branch | grep $squash_branch - > /dev/null; then
+      git checkout $squash_branch
+  else
+      git checkout -b $squash_branch ${1:-$(gain)}
+      git commit --allow-empty
+  fi
+
+  # bring changes over from multicommit branch
+  git diff $squash_branch $original_branch | git apply -
+  gnatty
+
+  # export
+  gp
+
+  # bring client back to multi branch
+  git checkout $original_branch
+
+  if [ ! -z "$(git diff $squash_branch)" ]; then
+      git diff
+      echo "THERE ARE DISCREPENCIES BETWEEN THIS BRANCH AND WHAT IS EXPORTED"
+  fi
+}
+
+function gp {
+  git cherry -v main
+  echo "PUSH ABOVE COMMITS FROM BRANCH: $(_git_branch) ?"; read _ # allow for cntrl c
+  git push $(git remote)
+}
+
+function gain {
+  main_diverged_commits=$(git cherry main)
+  if [ -z "$main_diverged_commits" ]; then
+    /usr/bin/env git rev-parse HEAD
+  else
+    /usr/bin/env git rev-parse $(git cherry main | head -1 | cut -f 2 -d " ")^
+  fi
+}
+
+function gitnames {
+  /usr/bin/env git diff --name-only $(gain)
+}
+
+function quickfix_git_diff {
+  git diff $1 --unified=0 --minimal | ~/BASH/vim/gitdiffqf.py
+}
+
+function git {
+  if [[ $1 == "names" ]]; then
+    gitnames
+    return
+  fi
+
+  if [[ $1 == "duff" ]]; then
+    command git diff $(gain)
+    return
+  fi
+
+  if [[ $1 == "ibase" ]]; then
+    command git rebase -i $(gain)
+    return
+  fi
+
+  command git "$@"
+}
+
+function branches {
+  git branch --sort=-committerdate | head -30 | tac
+}
+
+# from i8ramin - http://getintothis.com/blog/2012/04/02/git-grep-and-blame-bash-function/
+# runs git grep on a pattern, and then uses git blame to who did it
+function grep_blame() {
+  git grep -n $1 | while IFS=: read i j k; do git blame -L $j,$j $i | cat; done
+}
+
+function gch {
+  git checkout $(git branch --format='%(refname:short)' | fzy -q "$1")
+}
+

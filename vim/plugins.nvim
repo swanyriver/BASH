@@ -1,0 +1,48 @@
+""""""""""https://github.com/nvim-treesitter/nvim-treesitter""""""""""
+" do command keeps tree-sitter-cli up to date on vimplug upgrade
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+" use :TSInstall <language_to_install> to install parser
+" :TSInstallInfo for list of available languages
+
+""""""""" tree-sitter text-object motions etc """""""""
+""" depends on tree-sitter """""""""""""""""""""""""""
+"" https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+
+""""""""""""""""""""" end treesitter
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+nnoremap <space>f <cmd>Telescope find_files<cr>
+nnoremap <space>g <cmd>Telescope live_grep<cr>
+
+" https://github.com/tzachar/fuzzy.nvim
+" https://github.com/nvim-telescope/telescope-fzy-native.nvim
+Plug 'romgrk/fzy-lua-native', {'do': ':make'}
+Plug 'nvim-telescope/telescope-fzy-native.nvim'
+
+
+"""""""""""""""""""""""""""" built in nvim-lsp and nvim-cmp
+" https://github.com/neovim/nvim-lspconfig
+" https://github.com/hrsh7th/nvim-cmp
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+" Plug 'hrsh7th/cmp-path'
+" Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+" For vsnip users.
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+augroup delVsnipCommands
+  autocmd!
+  " I dont like that these are in the way of :vsplit tab completion
+  autocmd VimEnter * delcommand VsnipOpen
+  autocmd VimEnter * delcommand VsnipOpenEdit
+  autocmd VimEnter * delcommand VsnipOpenSplit
+  autocmd VimEnter * delcommand VsnipOpenVsplit
+  autocmd VimEnter * delcommand VsnipYank
+augroup END
+let g:using_nvimlsp_and_nvimcmp = 1
+

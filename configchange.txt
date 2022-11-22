@@ -1,13 +1,10 @@
-.bashrc
+#######################
+~/.bashrc
+#######################
 
-#MY ALIASES
-if [ -f ~/BASH/.bash_aliases ]; then
-    . ~/BASH/.bash_aliases
-fi
-
-#MY FUNCTIONS
-if [ -f ~/BASH/.bash_functions ]; then
-    . ~/BASH/.bash_functions
+#Desktop chain
+if [ -f ~/BASH/_desktop_imports ]; then
+    . ~/BASH/_desktop_imports
 fi
 
 #MY WELCOME
@@ -15,16 +12,140 @@ if [ -f ~/BASH/welcome.sh ]; then
     . ~/BASH/welcome.sh
 fi
 
-.profile
+#######################
+~/.non_interactive_rc
+#######################
+source ~/BASH/_bash_functions
+source ~/BASH/_my_hg
+source ~/BASH/_autogit
+
+####################
+~/.profile
+####################
 
 # set PATH so it includes my scripts at end
 if [ -d "$HOME/BASH" ] ; then
     PATH="$PATH:$HOME/BASH"
 fi
 
-export PATH="$PATH:/home/brandon/google_appengine"
-
-if [ -f "$HOME/BASH/.export" ]; then
-    . $HOME/BASH/.export
+if [ -f "$HOME/BASH/_export" ]; then
+    . $HOME/BASH/_export
 fi
+
+######################
+~/.bash_profile
+#####################
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+      . "$HOME/.bashrc"
+    fi
+fi
+
+
+if [ -f "$HOME/.profile" ]; then
+    . $HOME/.profile
+fi
+
+######## tools
+sudo apt-get install ripgrep fd-find fzy fzf moreutils
+ln -s $(which fdfind) ~/BASH/PRE_PATH/fd
+
+##############################
+# tmux plugings
+#############################
+git clone https://github.com/tmux-plugins/tmux-copycat.git ~/BASH/vim/plugins/tmux-copycat
+
+####################
+~/.tmux.conf
+####################
+source-file ~/BASH/tmux.conf
+
+####################
+~/.inputrc
+####################
+
+$include  $HOME/BASH/_myinputrc
+
+####################
+.vimrc
+####################
+source ~/BASH/vim/vimrc.vim
+
+########################
+# rg handled by export RIPGREP_CONFIG_PATH in _export
+########################
+
+########################
+~/.hgrc
+#######################
+# TODO create one
+%include ~/BASH/myhg.rc
+
+############
+vimplug setup
+###########
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+##########
+~/.vim/after/
+#########
+rm -rf $HOME/.vim/after
+ln -s $HOME/BASH/vim/after $HOME/.vim/after
+
+####### get vim color
+curl https://raw.githubusercontent.com/blerins/flattown/master/colors/flattown.vim > $HOME/BASH/vim/my_runtime/colors/flattown.vim
+
+########
+neovim
+########
+sudo apt-get install neovim
+
+https://neovim.io/doc/user/nvim.html#nvim-from-vim
+1. To start the transition, create your |init.vim| (user config) file:
+
+    :call mkdir(stdpath('config'), 'p')
+    :exe 'edit '.stdpath('config').'/init.vim'
+
+2. Add these contents to the file:
+
+    set runtimepath^=~/.vim runtimepath+=~/.vim/after
+    let &packpath = &runtimepath
+    source ~/.vimrc
+
+# link vim to nvim
+ln -s $(which nvim) $HOME/BASH/PRE_PATH/vim
+
+### Prepare-nvim-Plugins
+:PlugInstall
+
+###### nvim.treesitter
+:TSInstall bash python java cpp markdown
+
+##### nvim.cmp
+## vim/nvimcmp_settings.lua ##
+see: https://github.com/neovim/nvim-lspconfig#suggested-configuration
+see: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#super-tab-like-mapping
+see: https://github.com/hrsh7th/nvim-cmp
+    -- set completion only on tab key.
+    completion = { autocomplete = false, },
+see: https://github.com/hrsh7th/cmp-buffer
+    keyword_length = 5,
+
+## vim/my_runtime/lua/my_nvimlsp_onattach.lua ##
+source in luafile lsp.setup {  on_attach = require('my_nvimlsp_onattach') }
+Define vim.api.nvim_buf_set_keymap and vim.api.nvim_command collections
+  ```
+  on_attach = function(client, bufnr)
+  --
+  end
+  return on_attach
+  ```
+
+#########
+$HOME/BASH/welcome.sh
+##########
+#sudo apt-get install figlet
+figlet "Welcome!"
 

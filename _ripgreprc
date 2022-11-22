@@ -1,0 +1,11 @@
+--max-columns=500
+--max-columns-preview
+--smart-case
+
+# show collumn number, will allow for parsing a --vimgrep style
+--column
+
+# always show filename even if one file was specified
+#   necesayr for qf-list parsing
+--with-filename
+

@@ -1,0 +1,25 @@
+function qf_select {
+  ~/BASH/vim/super_quick_fix/qf_chooser.py <(cat) "$@" 2>&1 >/dev/tty </dev/tty
+}
+
+function choose_qf_from_list {
+  qfFile=$(mktemp)
+  # capture tmux buffer contents
+  get-entire-tmux-pane;
+  cat $TMUX_CAPTURE_FILE |
+  # select from fzy list, output qf fomat
+  qf_select > $qfFile;
+  # open as vim contents and convert to loc-list
+  cat $qfFile | vimscratch -c ":lbuff" -c "lopen" -c "lfirst" -
+}
+
+function open_most_recent_qf {
+  # capture tmux buffer contents
+  get-entire-tmux-pane;
+  cat $TMUX_CAPTURE_FILE |
+  # select last from list, output qf fomat
+  qf_select --last | \
+  # open as vim contents and convert to loc-list
+  vimscratch -c ":lbuff" -c "lopen" -c "lfirst" -
+}
+

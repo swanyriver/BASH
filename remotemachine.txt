@@ -1,0 +1,51 @@
+export MOSH_ESCAPE_KEY=$'\x0'
+
+# -Y links seleciton and clipboard (reg *, reg + vim) and allows window open
+alias towerg='ssh -Y $remoteHost'
+
+alias tower='ssh $remoteHost'
+
+alias towermux='ssh $remoteHost -t tmux a'
+
+# \; used so that is is parsed by tmux
+function towerchux {
+  ssh $remoteHost -t "tmux attach\; choose-tree";
+}
+
+function towernux {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply session name"
+    return
+  fi
+
+  ssh $remoteHost -t tmux new -s $1
+}
+
+function attach {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply display number"
+    return
+  fi
+  xpra attach \
+    --ssh="ssh -q" \
+    "ssh:${remoteHost}:${1}"
+}
+
+#mosh replacements for ssh
+# TODO replace these with a paramatarized version
+alias towerm='mosh $remoteHost'
+
+alias towermuxm='mosh $remoteHost -- sh -c "tmux a"'
+function towernuxm {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply session name"
+    return
+  fi
+
+  host=${2:-$remoteHost}
+
+  mosh $host -- sh -c "tmux new -s $1"
+}

@@ -1,0 +1,20 @@
+source_files=()
+source_files+=(_bash_aliases)
+source_files+=(_bash_functions)
+# source_files+=(_export) # moved to ~/.profile
+source_files+=(_autogit)
+source_files+=(_my_hg)
+source_files+=(_bash_settings)
+source_files+=(_adb_functions)
+source_files+=(_fzf_opts_and_tmux_settings) # fzf checks $TMUX
+if [[ -n $TMUX ]]; then
+  # functions for only within TMUX
+  source_files+=(vim/super_quick_fix/_helper_functions)
+  source_files+=(_tmux_client_functions)
+fi
+for f in ${source_files[@]}; do
+  if [ -f ~/BASH/$f ]; then
+    . ~/BASH/$f
+  fi
+done
+

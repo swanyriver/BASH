@@ -1,0 +1,95 @@
+function hs {
+  hg st;
+}
+
+function hl {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    hg xl
+  else
+    hg log -r "$1" -Tmylog
+  fi
+}
+
+function hc {
+  hl chain
+}
+
+function hf {
+  hg fixdot --no-amend
+  hg diff
+}
+
+function hgnames {
+  if [ -z "$HG_UPSTREAM_HEAD" ]; then
+    echo "\$HG_UPSTREAM_HEAD is empty"
+    return 1
+  fi
+
+  hg stat --rev "$(hg_parent_rev_query)" -n | sort
+}
+
+function hg_parent_rev {
+  # from: https://hg.mozilla.org/mozilla-central/help/revsets
+  # or:   hg help revsets
+  # hg log -r "ancestor(.,${HG_UPSTREAM_HEAD})" | grep -oP "changeset:\W*[0-9]+:\K[a-f,0-9]+"
+  # not any faster but more to the point
+  hg id -i -r "$(hg_parent_rev_query)"
+}
+
+function hg_parent_rev_query {
+  # from: https://hg.mozilla.org/mozilla-central/help/revsets
+  # or:   hg help revsets
+  # for functions refrencing -r rev-id faster to use a query like this, then to call hg * twice
+  # hg xx -r revid  == hg xx -r "revid"
+  echo "ancestor(.,${HG_UPSTREAM_HEAD})"
+}
+
+function hg {
+  if [[ $1 == "names" ]]; then
+    hgnames
+    return
+  fi
+
+  if [[ $1 == "duff" ]]; then
+    if [ -z "$HG_UPSTREAM_HEAD" ]; then
+      echo "\$HG_UPSTREAM_HEAD is empty"
+      return 1
+    fi
+    shift
+    command hg diff -r "$(hg_parent_rev_query)" $@
+    return
+  fi
+
+  # similar to git show
+  if [[ $1 == "show" ]]; then
+    command hg diff -c ${2:-tip}
+    return
+  fi
+
+  # analog for git apply
+  if [[ $1 == "apply" ]]; then
+    shift
+    command hg import --no-commit "${@:-/dev/stdin}"
+    return
+  fi
+
+  # analog for git checkout -- $1
+  if [[ $1 == "checkout" ]]; then
+    shift
+    command hg revert --no-backup "$@"
+    return
+  fi
+
+  if [[ $1 == "addall" ]]; then
+    command hg add $(hs | grep -oP "^\? \K.*" | join.py)
+    hs
+    return
+  fi
+
+  command hg "$@"
+}
+
+function duffmeld {
+  meld <(hg cat -r "$(hg_parent_rev_query)" $1) $1;
+}

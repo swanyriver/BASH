@@ -1,0 +1,50 @@
+export TMUX_CAPTURE_FILE="/tmp/tmp.TMUX_CAPTURE_FILE.txt"
+function get-entire-tmux-pane {
+  # tmux capture-pane -J -S- -E- -p
+
+  # capture-pane began not capturing visible-contents of pane, send to file workaround
+  # NOTE: error occurs when invoked in pipeline or in {}, call get-entire-tmux-pane then access $TMUX_CAPTURE_FILE contents.
+  tmux capture-pane -J -S- -E- -p > $TMUX_CAPTURE_FILE;
+}
+
+function capture-last-command {
+  get-entire-tmux-pane;
+  cat $TMUX_CAPTURE_FILE |
+    tac |
+    tail +3 |
+    # prints until seeing prompt, includes command
+    sed "/ ❱ /q" - |
+    tac
+}
+
+function tvim {
+  capture-last-command | vaper
+}
+
+function tvim-all {
+  get-entire-tmux-pane
+  vimscratch <(cat $TMUX_CAPTURE_FILE) +
+}
+
+function pipetotmux {
+  tmux loadb -
+  tmux run 'tmux showb | xsel -i --clipboard'
+}
+
+function piperesulttotmux {
+  capture-last-command | tail +2 | pipetotmux
+}
+
+function pipefromtmux {
+  tmux showb
+}
+
+# Set display used for clipboard-comm, :xpra or :1 for local
+function tdisp {
+  if [ $# -lt 1 ]; then
+    tmux show-env -g DISPLAY
+  else
+    tmux set-env -g DISPLAY :${1}
+  fi
+}
+

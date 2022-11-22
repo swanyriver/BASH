@@ -1,0 +1,211 @@
+function mkcd {
+  /bin/mkdir $1 && cd $1
+}
+
+function is_git {
+  git status > /dev/null 2>&1;
+  return $?
+}
+
+function is_hg {
+  # this works but $hg status = .5secs;  memoized below
+  # hg status > /dev/null 2>&1;
+
+  if [ -f .is_hg ]; then
+    return 0
+  fi
+
+  hg status > /dev/null 2>&1 && touch .is_hg;
+  return $?
+}
+
+function names {
+  if is_hg; then
+    hgnames;
+  elif is_git; then
+    gitnames;
+  fi
+}
+
+function dames {
+  if is_hg; then
+    hg st | cut -f 2 -d " ";
+  elif is_git; then
+    git diff --name-only;
+  fi
+}
+
+# NOTE: used by vim FindLine() function
+function file_at_head {
+  if [ $# -lt 1 ]; then echo "must supply file name"; return; fi
+  if is_git; then
+    git show $(gain):$1
+  elif is_hg; then
+    hg cat $1 -r "$(hg_parent_rev_query)"
+  fi
+}
+
+function vames {
+  names | xim
+}
+
+function dvames {
+  dames | xim
+}
+
+function chvames {
+  names | comment | vipe | uncomment | xim
+}
+
+function mistory {
+  search=${1:-"]"} # match all if no search provided
+  history -a # ensures commands from this session are available
+  history | grep -v "mistory" | grep -P "$search" | tail -500 | cut -f 2 -d ] | \
+  tac | ~/BASH/ordered_unique.py | tac | tail -100 | head -n -1
+}
+
+# could have been replaced with https://git-scm.com/docs/git-stripspace
+# git stripspace [-s | --strip-comments]
+# git stripspace [-c | --comment-lines]
+function uncomment {
+  stream=${1:-"/dev/stdin"};
+  sed "/^\s*#/d; /^\s*$/d" $stream
+}
+
+function comment {
+  stream=${1:-"/dev/stdin"};
+  sed 's/^/#/' $stream
+}
+
+function vimuncomment {
+  stream=${1:-"/dev/stdin"};
+  sed "s/\s*\".*//g; /^\s*$/d" $stream
+}
+
+function view {
+  $VISUAL -R "$@";
+}
+
+function next_in_file {
+  if [[ -z $1 ]]; then
+      echo "must supply file name"
+      return 1
+  fi
+
+  rot_down=$(head -1 $1)
+  tail -n +2 $1 | sponge $1
+  echo $rot_down >> $1
+  head -1 $1
+}
+
+function prev_in_file {
+  if [[ -z $1 ]]; then
+      echo "must supply file name"
+      return 1
+  fi
+
+  cat <(tail -1 $1; head -n -1 $1) | sponge $1
+  head -1 $1
+}
+
+function xim {
+  xargs -or $VISUAL -p
+}
+
+function vimscratch {
+  $VISUAL -c "bufdo setlocal buftype=nofile" -c ":bufdo setlocal noswapfile " "$@"
+}
+
+function vaper {
+  vimscratch "$@" -
+}
+
+function tman {
+ man tmux |
+   sed "/^             /s/\(-[a-zA-Z] \)/\n             \1/g" |
+   vaper -c ":bufdo set syn=man" -c ":bufdo set nonumber" -c "bufdo :set signcolumn=no"
+}
+
+function between {
+  sed -n -e "s/.*$1\(\S*\)${2:-$1}.*/\1/p";
+}
+
+function header {
+  echo "######################################################################################"
+  echo "############  $1"
+  echo "######################################################################################"
+}
+
+function mytodos {
+  _todos=$(names | xargs rg todo );
+  if [[ ! -z "$TODOS_EXCLUSIONS" ]]; then
+    _todos=$(echo "$_todos" | grep -Pv "$TODOS_EXCLUSIONS");
+  fi
+  if [[ -z "$_todos" ]]; then
+    echo "0";
+    return;
+  fi
+  echo "$_todos";
+  echo "$_todos" | wc -l;
+}
+
+
+function pyserve {
+  echo "http://$(hostname):8000"
+  python3 -m http.server
+}
+
+function tnux {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply session name"
+    return
+  fi
+
+  tmux new -s $1
+}
+
+function tchux {
+  tmux attach\; choose-tree
+}
+
+function tmax {
+  tmux attach;
+}
+
+function attach {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply DISPLAY num"
+    return
+  fi
+  xpra attach :${1}
+}
+
+function startxpra {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply display number"
+    return
+  fi
+
+  display=${1}
+  shift
+  xpra start :$display "$@"
+}
+
+function org {
+  # print ONLY matches.
+  rg --only-matching --no-filename --no-heading --no-column --no-line-number "$@"
+}
+
+function supercut {
+  re='^[0-9]+$'
+  if ! [[ $1 =~ $re ]] ; then
+    echo "must supply field number"; return
+  fi
+
+  # subtract 1, this regex is 0 index, function is 1 index, like cut.
+  field=$(($1-1))
+  grep -oP "^(\s*\S*\s*){$field}\K\S*" ${2:-"/dev/stdin"}
+}
