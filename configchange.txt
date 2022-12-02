@@ -48,7 +48,8 @@ if [ -f "$HOME/.profile" ]; then
 fi
 
 ######## tools
-sudo apt-get install ripgrep fd-find fzy fzf moreutils
+sudo apt-get install ripgrep fd-find fzy fzf moreutils figlet mercurial xpra make build-essential vim
+mkdir -p ~/BASH/PRE_PATH/
 ln -s $(which fdfind) ~/BASH/PRE_PATH/fd
 
 ##############################
@@ -115,6 +116,7 @@ https://neovim.io/doc/user/nvim.html#nvim-from-vim
     source ~/.vimrc
 
 # link vim to nvim
+mkdir -p ~/BASH/PRE_PATH/
 ln -s $(which nvim) $HOME/BASH/PRE_PATH/vim
 
 ### Prepare-nvim-Plugins
