@@ -46,18 +46,32 @@ function gritty {
   fi
 }
 
+# TODO move out and genericize for HG/HG_UPSTREAM_HEAD
+function set-primary-branch {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply Primary-Branch-Name"
+    return
+  fi
+  git config --local alias.PRIMARYBRANCH $1
+}
+
+function get-primary-branch {
+   git config --local --get alias.PRIMARYBRANCH 2>/dev/null || echo "main"
+}
+
 function gp {
-  git cherry -v main
+  git cherry -v $(get-primary-branch)
   echo "PUSH ABOVE COMMITS FROM BRANCH: $(_git_branch) ?"; read _ # allow for cntrl c
   git push $(git remote)
 }
 
 function gain {
-  main_diverged_commits=$(git cherry main)
+  main_diverged_commits=$(git cherry $(get-primary-branch))
   if [ -z "$main_diverged_commits" ]; then
     /usr/bin/env git rev-parse HEAD
   else
-    /usr/bin/env git rev-parse $(git cherry main | head -1 | cut -f 2 -d " ")^
+    /usr/bin/env git rev-parse $(git cherry $(get-primary-branch) | head -1 | cut -f 2 -d " ")^
   fi
 }
 
