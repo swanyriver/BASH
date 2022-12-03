@@ -27,6 +27,9 @@ endif
 if exists("g:using_nvimlsp_and_nvimcmp") && g:using_nvimlsp_and_nvimcmp && has('nvim')
   luafile $HOME/BASH/vim/nvimlsp_settings.lua
   luafile $HOME/BASH/vim/nvimcmp_settings.lua
+  " TO add LSP make sure to do the following in lsp.setup
+  "   * lsp.setup {  on_attach = require('my_nvimlsp_onattach') } vim/my_runtime/lua/my_nvimlsp_onattach.lua 
+  "   * lsp.setup { capabilities = require('cmp_nvim_lsp').default_capabilities() } vim/nvimcmp_settings.lua
 endif
 if has('nvim')
   luafile $HOME/BASH/vim/plugin_settings.lua
