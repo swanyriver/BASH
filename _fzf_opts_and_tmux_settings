@@ -1,5 +1,7 @@
 FZF_TMUX=1 # use fzf-tmux if $TMUX
 FZF_CTRL_T_COMMAND='fd -t f . --strip-cwd-prefix' # Use fd for file_select
-FZF_TMUX_OPTS='-p 90%,90% --layout=default' # A window that ocupies most of the screen, layout option keeps prompt at bottom.
+FZF_TMUX_OPTS='-p 90%,90%' # A window that ocupies most of the screen
+FZF_CTRL_T_OPTS='--layout=default' # keep prompt at bottom
+FZF_ALT_C_OPTS='--layout=default' # keep prompt at bottom
 FZF_CTRL_T_OPTS='--preview="if [[ $(basename {}) =~ ^_ ]]; then batcat --language=sh --color=always {}; else batcat --color=always {}; fi"'
 
