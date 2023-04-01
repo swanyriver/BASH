@@ -45,3 +45,6 @@ onoremap il[ :<c-u>normal! F]vi[<cr>
 " toggle spell check
 nnoremap <silent> <Leader>k :set spell!<CR>
 
+" search visually selected with //
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+

@@ -63,7 +63,18 @@ function hg {
 
   # similar to git show
   if [[ $1 == "show" ]]; then
-    command hg diff -c ${2:-tip}
+    shift
+    # allow -r specifier or not
+    if [[ $1 == "-r" ]]; then shift; fi
+    # try to extract revset argument, default to .
+    rev=$(echo $1 | grep -o '^[0-9a-f]*$')
+    if [[ -n $rev ]]; then
+      shift
+    else
+      rev="."
+    fi
+    # allow passing --stat, --reverse etc with or without revset
+    command hg diff -c $rev $@
     return
   fi
 
@@ -71,6 +82,12 @@ function hg {
   if [[ $1 == "apply" ]]; then
     shift
     command hg import --no-commit "${@:-/dev/stdin}"
+    return
+  fi
+
+  # apply contents of tmux buffer
+  if [[ $1 == "tapply" ]]; then
+    hg apply <(tmux showb)
     return
   fi
 
