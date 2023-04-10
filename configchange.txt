@@ -145,6 +145,10 @@ Define vim.api.nvim_buf_set_keymap and vim.api.nvim_command collections
   return on_attach
   ```
 
+########### ruby/jekyll for blogging
+sudo apt-get install ruby-full build-essential zlib1g-dev
+gem install jekyll bundler
+
 #########
 $HOME/BASH/welcome.sh
 ##########

@@ -1,0 +1,11 @@
+# https://jekyllrb.com/docs/installation/ubuntu/
+
+# Install Ruby Gems to ~/gems
+export GEM_HOME="$HOME/gems"
+if [[ -z $(echo $PATH | grep "gems/bin") ]]; then
+  export PATH="$PATH:$HOME/gems/bin"
+fi
+
+function jk {
+  bundle exec jekyll $@
+}
