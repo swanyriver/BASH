@@ -209,3 +209,7 @@ function supercut {
   field=$(($1-1))
   grep -oP "^(\s*\S*\s*){$field}\K\S*" ${2:-"/dev/stdin"}
 }
+
+function mySort {
+  sort | uniq -c | sort -nk1 $@
+}

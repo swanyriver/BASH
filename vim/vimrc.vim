@@ -47,6 +47,7 @@ source $HOME/BASH/vim/autoimport.vim
 source $HOME/BASH/vim/namevar.vim
 source $HOME/BASH/vim/yanknote.vim
 source $HOME/BASH/vim/send_to_tmux_and_clipboard.vim
+source $HOME/BASH/vim/copyovercpp.vim
 
 " NVIM specific
 if has('nvim')
