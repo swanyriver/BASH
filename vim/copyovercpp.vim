@@ -1,8 +1,9 @@
 function CopyOverCpp()
   let l:saved_unnamed_register = @@
+  let copy_from_save_cursor = getcurpos()
   normal ^Y
-  wincmd w
-  let save_cursor = getcurpos()
+  wincmd h
+  let copy_to_save_cursor = getcurpos()
 
   if @@ =~ "\^using "
     " echo "copy using"
@@ -20,9 +21,10 @@ function CopyOverCpp()
     echom "not a using or include"
   endif
 
-  call setpos('.', save_cursor)
+  call setpos('.', copy_to_save_cursor)
   normal j
-  wincmd w
+  wincmd l
+  call setpos('.', copy_from_save_cursor)
   let @@ = l:saved_unnamed_register
 endfunction
 

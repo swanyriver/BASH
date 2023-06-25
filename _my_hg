@@ -5,12 +5,12 @@ function hs {
 function hl {
   numberOfArguments=$#
   if [ $numberOfArguments -lt 1 ]; then
-    #hg xl
+    hg xl
 
-    # reverse order to avoid entering pager when older stuff excceds
-    # stuff beyond fold is usually older than my current concern
-    # this will end with most recent always visible
-    hg xl --color=always | tac | tr '\\/' '/\\'
+    # # reverse order to avoid entering pager when older stuff excceds
+    # # stuff beyond fold is usually older than my current concern
+    # # this will end with most recent always visible
+    # hg xl --color=always | tac | tr '\\/' '/\\'
   else
     hg log -r "$1" -Tmylog
   fi
