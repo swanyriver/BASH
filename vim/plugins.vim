@@ -76,3 +76,7 @@ nnoremap <silent> <leader>S :<c-u>normal \s$<cr>
 " gzz for line gz<motion>
 Plug 'christoomey/vim-titlecase'
 
+
+"" netrw replacement
+"" - to go to buffer dir view
+Plug 'tpope/vim-vinegar'

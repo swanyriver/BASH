@@ -56,7 +56,8 @@ fi
 ##############################
 # tmux plugings
 #############################
-git clone https://github.com/tmux-plugins/tmux-copycat.git ~/BASH/vim/plugins/tmux-copycat
+git clone https://github.com/Morantron/tmux-fingers ~/BASH/tmux_plugins/tmux-fingers
+git clone https://github.com/laktak/extrakto ~/BASH/tmux_plugins/extrakto
 
 ####################
 ~/.tmux.conf

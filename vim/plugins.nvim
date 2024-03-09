@@ -46,3 +46,18 @@ augroup delVsnipCommands
 augroup END
 let g:using_nvimlsp_and_nvimcmp = 1
 
+" legend for indent levels
+" https://github.com/lukas-reineke/indent-blankline.nvim
+Plug 'lukas-reineke/indent-blankline.nvim', { 'tag': 'v2.20.8' }
+let g:indent_blankline_use_treesitter = v:true
+let g:indent_blankline_use_treesitter_scope = v:true
+let g:indent_blankline_show_first_indent_level = v:false
+let g:indent_blankline_show_current_context = v:true
+let g:indent_blankline_show_current_context_start = v:true
+" ensure multi indents are only indicated once per scope
+let g:indent_blankline_max_indent_increase = 1
+highlight IndentBlanklineChar ctermfg=237 term=nocombine guifg=#3a3a3a gui=nocombine
+highlight IndentBlanklineContextChar ctermfg=241 term=nocombine guifg=#626262 gui=nocombine
+" on|off by default, space-tab to toggle
+let g:indent_blankline_enabled = v:true
+nnoremap <space><tab> :IndentBlanklineToggle<CR>

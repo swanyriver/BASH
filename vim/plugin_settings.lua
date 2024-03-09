@@ -35,6 +35,11 @@ require'nvim-treesitter.configs'.setup {
         ["ai"] = "@conditional.outer",
         ["ii"] = "@conditional.inner",
       },
+
+      -- Note: only affects y,d actions,  use Vaf to linewise visual select
+      selection_modes = {
+        ['@function.outer'] = 'V', -- linewise
+      },
     },
 
     move = {

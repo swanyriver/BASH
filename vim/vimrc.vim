@@ -5,6 +5,9 @@ set runtimepath+=~/BASH/vim/my_runtime
 source $HOME/BASH/vim/settings.vim
 source $HOME/BASH/vim/keymaps.vim
 
+" fix tab close behavior
+source $HOME/BASH/vim/tabcloseleft.vim
+
 """"""" Plugins """""""""
 " Using vim-plug:
 " https://github.com/junegunn/vim-plug

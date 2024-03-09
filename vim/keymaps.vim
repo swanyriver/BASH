@@ -48,3 +48,4 @@ nnoremap <silent> <Leader>k :set spell!<CR>
 " search visually selected with //
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
+nnoremap <space>w :<c-u>w<cr>

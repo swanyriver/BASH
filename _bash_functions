@@ -213,3 +213,7 @@ function supercut {
 function mySort {
   sort | uniq -c | sort -nk1 $@
 }
+
+function rgo {
+  command rg --no-config --no-line-number --no-filename --smart-case "$@"
+}

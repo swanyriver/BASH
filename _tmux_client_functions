@@ -48,3 +48,6 @@ function tdisp {
   fi
 }
 
+function txauth {
+   tmux set-env -g XAUTHORITY $(systemctl --user show-environment | grep XAUTHORITY | cut -f 2 -d "=")
+}
