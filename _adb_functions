@@ -2,6 +2,20 @@ function adbDeviceNames {
   adb devices | grep -Pe '\t(device|emulator)' | cut -f 1
 }
 
+function chooseAdb {
+  numberOfArguments=$#
+  if [ $numberOfArguments -ge 1 ]; then
+    device=$1
+  elif [[ -n $ANDROID_SERIAL ]]; then
+    device=$ANDROID_SERIAL
+  elif [[ $(adbDeviceNames | wc -l) -eq 1  ]]; then
+    device=$(adbDeviceNames)
+  else
+    device=$(list-adb-names | fzy)
+  fi
+  echo $device
+}
+
 function alladb {
   for d in $(adbDeviceNames); do
     adb -s $d $@
@@ -97,15 +111,7 @@ function adbByName {
 }
 
 function adbScreenToStdout {
-  numberOfArguments=$#
-  if [ $numberOfArguments -ge 1 ]; then
-    device=$1
-  elif [[ $(adbDeviceNames | wc -l) -eq 1  ]]; then
-    device=$(adbDeviceNames)
-  else
-    device=$(list-adb-names | fzy | cut -f 1 -d " ")
-  fi
-  adb -s $device shell screencap -p
+  ANDROID_SERIAL=$(chooseAdb $@) adb shell screencap -p
 }
 
 function adbCompare {
@@ -114,4 +120,36 @@ function adbCompare {
     return
   fi
   compare png:<(adbScreenToStdout $(adbNameToDev $1)) png:<(adbScreenToStdout $(adbNameToDev $2)) png:-
+}
+
+function adbShowTaps {
+  ANDROID_SERIAL=$(chooseAdb $@) adb shell content insert --uri content://settings/system --bind name:s:show_touches --bind value:i:1
+}
+
+function adbStopShowTaps {
+  ANDROID_SERIAL=$(chooseAdb $@) adb shell content insert --uri content://settings/system --bind name:s:show_touches --bind value:i:0
+}
+
+# arg-1: file-name, ommiting /sdcard and .mp4
+function adbRecord {
+  numberOfArguments=$#
+  if [ $numberOfArguments -lt 1 ]; then
+    echo "must supply file name"
+    return 1;
+  fi
+
+  # not passing file-name arg
+  device=$(chooseAdb)
+
+  adbShowTaps $device
+  ANDROID_SERIAL=$device adb shell screenrecord /sdcard/$1.mp4 & pid=$!
+  echo "press any key to stop recording";
+  read -n1
+  android_shell_pid=$(ANDROID_SERIAL=$device adb shell pidof screenrecord)
+  ANDROID_SERIAL=$device adb shell kill -2 $android_shell_pid
+  # wait for video to finalize
+  wait $pid
+  ANDROID_SERIAL=$device adb pull /sdcard/$1.mp4
+  # display full file path for retrieved recording
+  readlink -f $1.mp4
 }
