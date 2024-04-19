@@ -31,6 +31,8 @@ Plug 'vim-airline/vim-airline'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""commentary"""comment and uncomment lines"""""""""""""""
 Plug 'tpope/vim-commentary'
+" Note: keybindings replaced by comment.nvim but Plug:Commentary used by yank-comment-paste
+" TODO: replace dependency with api.comment, see :help comment-nvim
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

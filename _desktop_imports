@@ -8,6 +8,7 @@ source_files+=(_bash_settings)
 source_files+=(_adb_functions)
 source_files+=(_fzf_opts_and_tmux_settings) # fzf checks $TMUX
 source_files+=(_jekyll_stuff)
+source_files+=(_auto_lint)
 if [[ -n $TMUX ]]; then
   # functions for only within TMUX
   source_files+=(vim/super_quick_fix/_helper_functions)

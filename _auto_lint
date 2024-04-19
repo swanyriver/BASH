@@ -1,0 +1,7 @@
+function java_remove_unused_imports {
+  for i in $(grep "^import" $1 | grep -oP "\.\K\w*(?=;)"); do
+    grep $i <(grep -v "^import" $1) >/dev/null || echo $i; 
+  done | xargs -I {} sed -i "/^import.*{}/d" $1
+}
+
+# TODO cc_auto_remove_using

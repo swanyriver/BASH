@@ -31,6 +31,14 @@ function pipetotmux {
   tmux run 'tmux showb | xsel -i --clipboard'
 }
 
+function teetotmux {
+  tee /dev/stderr | pipetotmux
+}
+
+function pipetotmuxn {
+  tr -d "\n" | pipetotmux
+}
+
 function piperesulttotmux {
   capture-last-command | tail +2 | pipetotmux
 }

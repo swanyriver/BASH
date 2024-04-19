@@ -53,7 +53,8 @@ let g:indent_blankline_use_treesitter = v:true
 let g:indent_blankline_use_treesitter_scope = v:true
 let g:indent_blankline_show_first_indent_level = v:false
 let g:indent_blankline_show_current_context = v:true
-let g:indent_blankline_show_current_context_start = v:true
+" distracting and inacurate
+" let g:indent_blankline_show_current_context_start = v:true
 " ensure multi indents are only indicated once per scope
 let g:indent_blankline_max_indent_increase = 1
 highlight IndentBlanklineChar ctermfg=237 term=nocombine guifg=#3a3a3a gui=nocombine
@@ -61,3 +62,19 @@ highlight IndentBlanklineContextChar ctermfg=241 term=nocombine guifg=#626262 gu
 " on|off by default, space-tab to toggle
 let g:indent_blankline_enabled = v:true
 nnoremap <space><tab> :IndentBlanklineToggle<CR>
+
+" better commentary (blockwise motions available, comments empty lines)
+" https://github.com/numToStr/Comment.nvim
+" gcO start comment above
+" gcA start comment at end of line
+" gcip comment whole paragraph
+" gcif comment in function (similar to gci{ )
+" gcaf comment whole function (inlusing empty lines)
+Plug 'numToStr/Comment.nvim'
+
+" Jump-to-fzf/label
+" https://github.com/rlane/pounce.nvim
+" before preview feature was added
+Plug 'rlane/pounce.nvim', { 'commit': 'dbcba680fa7921e8d13a273bdae43178bd9a1964' }
+nmap s <cmd>Pounce<CR>
+nmap S <cmd>PounceRepeat<CR>

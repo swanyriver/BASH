@@ -122,7 +122,7 @@ set smarttab
 " disable textrwapping would rather clean it up with tool
 augroup setFormatOptionsGroup
   autocmd!
-  autocmd BufNewFile,BufRead,Bufenter * setlocal formatoptions=jrql
+  autocmd BufNewFile,BufRead,Bufenter * set formatoptions=jrql
 augroup END
 
 " signcolumn alwasy visible, instead of popping in when plugins load

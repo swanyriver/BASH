@@ -105,3 +105,6 @@ require("telescope").setup {
 
 -- fzy sorter instead
 require('telescope').load_extension('fzy_native')
+
+-- https://github.com/numToStr/Comment.nvim
+require('Comment').setup()
