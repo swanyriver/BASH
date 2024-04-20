@@ -1,0 +1,67 @@
+# designed at signify version DEC/2021
+# silent! let g:plugs['vim-signify'].commit = '69498f6d49f3eeac06870012416dd9bf867b84f3'
+function review {
+  # --cmd runs before vimrc and signify loading, replace hg diff with one that will only show diff of rev
+  alt_diff=""
+  alt_diff="${alt_diff} let g:signify_vcs_cmds = {"
+  alt_diff="${alt_diff} 'hg':'hg diff -c . --color=never --config aliases.diff= --nodates -U0 -- %f',"
+  alt_diff="${alt_diff} 'git':'git diff HEAD^1 HEAD --no-color --no-ext-diff -U0 -- %f',"
+  alt_diff="${alt_diff} }"
+
+  if is_hg; then
+    hg diff -c . --root .
+  elif is_git; then
+    git diff HEAD^1 HEAD
+  fi | diffqf | vimscratch \
+    --cmd "$alt_diff" \
+    -c ":lbuff" -c "lopen" -c "lfirst" -
+
+  # TODO :SignifyDiff doesnt work,  find some way to open side-by-side for large deletions
+}
+
+# NOTE best to invoke diff input with root set to pwd
+#  vim -q <( hg diff --root . | diffqf )
+function diffqf {
+  local firstLineOfDiff=""
+  local firstLineNumber=""
+
+  # piped normal hg/git diff including context
+  ~/BASH/tmux_plugins/showlinenum/showlinenum.awk show_header=0 | \
+    tac | \
+    while read -r line; do
+      local line_number=$(grep -oP "^\S*?:\K\d*(?=:)" <(echo $line))
+      if grep -P ":(\d\d*|\s\s*):(-|\+)" <(echo $line) 2>&1 >/dev/null; then
+        # in hunk
+        firstLineOfDiff=$line
+        if [[ -n $line_number ]]; then
+          firstLineNumber=$line_number
+        fi
+
+      else
+        if [[ -n $firstLineOfDiff ]]; then
+          # finished hunk
+
+          # special case all deletions, pin to line before
+          if [[ -z $firstLineNumber ]]; then
+            firstLineNumber=$line_number
+          fi
+          firstLineOfDiff=$(sed "s/:\s\s*:/:$firstLineNumber:/" <(echo $firstLineOfDiff))
+
+          echo $firstLineOfDiff
+
+          firstLineOfDiff=""
+          firstLineNumber=""
+        fi
+      fi
+    done | \
+    tac
+
+    # TODO requries -U=>1
+    #   depends on at least one line of context preceeding first diff (to enter finished-hunk branch)
+    #   depends on line preeceeding deletion
+    # TODO detect failure and pares -U 0 using context headers (remove show_header=0)
+
+    # TODO invoke from vim/qf_maker
+    #   maybe, would fit qf from terminal pattern, but would needlessly polute shift-v chooser
+}
+

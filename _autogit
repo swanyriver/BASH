@@ -115,4 +115,3 @@ function grep_blame() {
 function gch {
   git checkout $(git branch --format='%(refname:short)' | fzy -q "$1")
 }
-

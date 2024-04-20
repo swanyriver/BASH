@@ -72,7 +72,7 @@ function hg {
     # allow -r specifier or not
     if [[ $1 == "-r" ]]; then shift; fi
     # try to extract revset argument, default to .
-    rev=$(echo $1 | grep -o '^[0-9a-f]*$')
+    rev=$(echo $1 | grep -oP '^([0-9a-f]*|tip)$')
     if [[ -n $rev ]]; then
       shift
     else

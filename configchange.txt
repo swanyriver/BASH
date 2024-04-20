@@ -58,6 +58,7 @@ fi
 #############################
 git clone https://github.com/Morantron/tmux-fingers ~/BASH/tmux_plugins/tmux-fingers
 git clone https://github.com/laktak/extrakto ~/BASH/tmux_plugins/extrakto
+git clone https://github.com/jay/showlinenum.git ~/BASH/tmux_plugins/showlinenum
 
 ####################
 ~/.tmux.conf
