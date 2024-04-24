@@ -138,6 +138,12 @@ function adbRecord {
     return 1;
   fi
 
+  if [ -f $1.mp4 ]; then
+    echo "file already exists"
+    readlink -f $1.mp4
+    return 1;
+  fi
+
   # not passing file-name arg
   device=$(chooseAdb)
 
