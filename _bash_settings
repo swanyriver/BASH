@@ -11,6 +11,10 @@ NORMAL="\033[0;39m"
 # allows for dir/**/file globing, recurising all sub-dirs.
 shopt -s globstar
 
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
 # prevesnt ctrl-s from locking terminal
 # not should only be set if non-interactive but ~/.bashrc is doing this check
 # already.

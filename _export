@@ -5,6 +5,10 @@ export RIPGREP_CONFIG_PATH="${HOME}/BASH/_ripgreprc"
 # make vim always nvim
 # ln -s $(which nvim) $HOME/BASH/PRE_PATH/vim
 if [ -d "$HOME/BASH/PRE_PATH" ] ; then
-    PATH="$HOME/BASH/PRE_PATH:$PATH"
+    export PATH="$HOME/BASH/PRE_PATH:$PATH"
 fi
 
+export GOPATH=$(go env GOPATH)
+if [ -d "$GOPATH/bin" ]; then
+  export PATH=$PATH:$GOPATH/bin
+fi

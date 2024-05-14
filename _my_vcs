@@ -40,6 +40,15 @@ function reviewduff {
   # TODO :SignifyDiff doesnt work,  find some way to open side-by-side for large deletions
 }
 
+function reviewdiff {
+  if is_hg; then
+    hg diff
+  elif is_git; then
+    git diff
+  fi | diffqf | vimscratch \
+    -c ":lbuff" -c "lopen" -c "lfirst" -
+}
+
 # NOTE best to invoke diff input with root set to pwd
 #  vim -q <( hg diff --root . | diffqf )
 function diffqf {

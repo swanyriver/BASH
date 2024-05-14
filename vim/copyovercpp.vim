@@ -17,8 +17,13 @@ function CopyOverCpp()
     let l:foundline = search("^#include ", "b")
     call append(l:foundline, @@)
     write
+  elseif @@ =~ "\^import "
+    normal G
+    let l:foundline = search("^import ", "b")
+    call append(l:foundline, @@)
+    write
   else
-    echom "not a using or include"
+    echom "not a using or include or java import"
   endif
 
   call setpos('.', copy_to_save_cursor)

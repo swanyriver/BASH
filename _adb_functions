@@ -159,3 +159,24 @@ function adbRecord {
   # display full file path for retrieved recording
   readlink -f $1.mp4
 }
+
+function package_allstop_() {
+  local package=$1
+  alladb shell am force-stop $package
+}
+
+function package_allstart() {
+  local package=$1
+  local activity=$2
+  alladb shell am start ${package}/.activities.${activity}
+}
+
+function package_allstop() {
+  package_allstop_ $@ && package_allstart $@
+}
+
+function package_alluninstall {
+  local package=$1
+  alladb shell pm uninstall $package
+}
+
