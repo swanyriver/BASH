@@ -1,0 +1,77 @@
+#############
+my-todos setup
+#############
+in some _export sourced file, setup a regex matcher for valid todo format
+  export TODOS_EXCLUSIONS="url:\d*"
+
+
+#########################
+for vim/autoimport.vim
+########################
+in some *.vim define java_dirs and cpp_dirs
+
+let g:cpp_dirs = "dirs/subdir"
+let g:java_dirs = "java/com/* javatests/com/*"
+
+
+########################
+vim overrides
+########################
+define `let g:file_at_head_cmd = "source ".$HOME."/BASH/special_file_at_head; special_file_at_head""` if different from file_at_head
+
+
+# telescope for only some dirs
+require("telescope").setup {
+  defaults = {
+    path_display = function(opts, path)
+      -- Do common substitutions
+      path = path:gsub("^long/path/to/dir", "l/p/t/d", 1)
+      path = path:gsub("^long/path/to/dir", "l/p/t/d", 1)
+
+      local new_opts = {
+        path_display = {
+          truncate = true,
+        },
+        __length = opts.__length,
+      }
+      path = require('telescope.utils').transform_path(new_opts, path)
+      opts.__length = new_opts.__length
+      return path
+    end,
+  },
+  pickers = {
+    find_files = {
+      find_command = {
+        "fd",
+        ".",
+        "--type", "f",
+        -- "--strip-cwd-prefix", -- incompatible with --search-path
+        "--search-path","relevant/project/dir",
+        "--search-path","other/relevant/project",
+        "-E", "*.<excluded-ext>"
+      }
+    },
+
+    live_grep = {
+      search_dirs = {
+        "relevant/project/dir",
+        "other/relevant/project",
+      }
+    },
+
+  }
+}
+
+
+#####################
+Project-Paths
+#####################
+for each top-level-dir, list of sub-dirs and fzf ctrl-t override
+
+```bash sourced file
+PROJECT_PATHS=""
+PROJECT_PATHS="${PROJECT_PATHS} subdir/a"
+PROJECT_PATHS="${PROJECT_PATHS} subdir_b/stuff"
+
+FZF_CTRL_T_COMMAND='if [[ $PWD =~ ^/top/level/dir/ ]]; then fdfind -t f . $PROJECT_PATHS; else fdfind -t f . --strip-cwd-prefix; fi'
+```

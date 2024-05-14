@@ -1,0 +1,59 @@
+export remoteHost="remote.hostname"
+
+# prevent it conflicting with ctrl-^ in vim
+# i believe it is ctrl-~, but i have not had any need for triggering mosh escape
+export MOSH_ESCAPE_KEY=$'\x0'
+
+# -Y links selection and clipboard (reg *, reg + vim) and allows window open
+alias towerg='ssh -Y $remoteHost'
+
+alias tower='ssh $remoteHost'
+
+# TODO: maybe replace tower with this and a specail command to ssh without tmux
+# NOTE: -t allocates a psuedo tty for screen applications
+alias towermux='ssh $remoteHost -t tmux a'
+
+function towerchux {
+  ssh $remoteHost -t "tmux attach\; choose-tree";
+}
+
+function towernux {
+    numberOfArguments=$#
+    if [ $numberOfArguments -lt 1 ]; then
+      echo "must supply session name"
+      return
+    fi
+
+    ssh $remoteHost -t tmux new -s $1
+}
+
+# connect to xpra
+function attach {
+	numberOfArguments=$#
+	if [ $numberOfArguments -lt 1 ]; then
+		echo "must supply display number"
+		return
+	fi
+
+        xpra attach \
+          --ssh="ssh -q" \
+          "ssh:${remoteHost}:${1}"
+}
+
+
+#mosh replacements for ssh
+# TODO replace these with a paramatarized version
+alias towerm='mosh $remoteHost'
+
+alias towermuxm='mosh $remoteHost -- sh -c "tmux a"'
+function towernuxm {
+    numberOfArguments=$#
+    if [ $numberOfArguments -lt 1 ]; then
+      echo "must supply session name"
+      return
+    fi
+
+    host=${2:-$remoteHost}
+
+    mosh $host -- sh -c "tmux new -s $1"
+}
