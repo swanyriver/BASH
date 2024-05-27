@@ -2,6 +2,7 @@
 import fileinput
 import re
 from collections import namedtuple
+import diffqf
 
 CommandAndOutput = namedtuple('CommandAndOutput', ['command', 'output'])
 ParsedCommand = namedtuple('ParsedCommand', ['command', 'output', 'qflist'])
@@ -34,9 +35,9 @@ def parseOutput(command, output):
   # choose parser based on last command in pipeline
   command = command.split(" | ")[-1]
 
-  # TODO implement a git diff parser, there is already a vim one :GitDiffQuickFix, uses ~/BASH/vim/gitdiffqf.py
-  # if re.compile("^git diff").search(command):
-  #   return parseGitDiff(output)
+  # TODO check more than just the first line
+  if output and re.compile("^diff --git").search(output[0]):
+    return diffqf.parsediff(output)
 
   if re.compile("(?:^| \| )(xargs )?rg ").search(command):
     return parseRg(output)
@@ -80,7 +81,7 @@ def get_quickfixlists(striped_lines_list):
 # writes: a human readable list of parsed qf lists
 # NOTE for dev/test only, otherwise use get_quickfixlists()
 def main():
-  parsed_commands = get_quickfixlists([line.strip() for line in fileinput.input()])
+  parsed_commands = get_quickfixlists([line.rstrip() for line in fileinput.input()])
 
   for item in parsed_commands:
     print( "*************", item.command, "*************" )

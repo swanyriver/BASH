@@ -79,10 +79,6 @@ function gitnames {
   /usr/bin/env git diff --name-only $(gain)
 }
 
-function quickfix_git_diff {
-  git diff $1 --unified=0 --minimal | ~/BASH/vim/gitdiffqf.py
-}
-
 function git {
   if [[ $1 == "names" ]]; then
     gitnames
