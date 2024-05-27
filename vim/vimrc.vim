@@ -39,6 +39,7 @@ if has('nvim')
 endif
 
 " Functions
+source $HOME/BASH/vim/functions.vim
 source $HOME/BASH/vim/shared_functions.vim
 source $HOME/BASH/vim/quick_fix_tools.vim
 source $HOME/BASH/vim/toggle_case.vim

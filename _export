@@ -2,6 +2,9 @@ export VISUAL=nvim
 export EDITOR="$VISUAL"
 export RIPGREP_CONFIG_PATH="${HOME}/BASH/_ripgreprc"
 
+export HISTSIZE=10000
+export HISTFILESIZE=10000
+
 # make vim always nvim
 # ln -s $(which nvim) $HOME/BASH/PRE_PATH/vim
 if [ -d "$HOME/BASH/PRE_PATH" ] ; then
