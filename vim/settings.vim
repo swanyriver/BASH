@@ -105,6 +105,11 @@ set updatecount=70
 "   cursorhold action will checktime of file when cursor inavtive for
 "   {updatetime}.
 set autoread
+" when going from nvim .7 to .9 autoread began not working reliably, manually call checktime instead
+augroup autoreadFixAuGroup
+  autocmd!
+  autocmd CursorHold,FocusGained,BufEnter * silent! checktime
+augroup END
 
 set autoindent nocindent nosmartindent
 set backspace=indent,eol,start

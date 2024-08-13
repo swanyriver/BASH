@@ -3,6 +3,7 @@
 " :source this file in vim to restore the snapshot
 " or execute: vim -S snapshot.vim
 " compatible with NVIM v0.7.2
+" TODO update for NVIM v0.9.5 07/25/2024
 
 silent! let g:plugs['Comment.nvim'].commit = '0236521ea582747b58869cb72f70ccfa967d2e89'
 silent! let g:plugs['cmp-buffer'].commit = '3022dbc9166796b644a841a02de8dd1cc1d311fa'

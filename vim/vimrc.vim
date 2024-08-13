@@ -28,6 +28,7 @@ if exists("g:using_plugin_vim_lsp") && g:using_plugin_vim_lsp
   source $HOME/BASH/vim/lsp_settings.vim
 endif
 if exists("g:using_nvimlsp_and_nvimcmp") && g:using_nvimlsp_and_nvimcmp && has('nvim')
+  " NOTE: this is the active one, see vim/plugins.nvim:47
   luafile $HOME/BASH/vim/nvimlsp_settings.lua
   luafile $HOME/BASH/vim/nvimcmp_settings.lua
   " TO add LSP make sure to do the following in lsp.setup
