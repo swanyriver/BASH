@@ -180,3 +180,6 @@ function package_alluninstall {
   alladb shell pm uninstall $package
 }
 
+function grepcat {
+  ANDROID_SERIAL=$(chooseAdb) adb logcat | grep --line-buffered $@
+}
