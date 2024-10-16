@@ -3,11 +3,13 @@ function! s:YankCommentPaste(type)
 
   if a:type ==# 'V'
     normal! '<V'>y
-    execute "'<,'>Commentary"
+    normal! '<V'>
+    execute "normal \<Plug>(comment_toggle_linewise_visual)"
     normal! '>
   elseif a:type ==# 'line'
     normal! '[V']y
-    execute "'[,']Commentary"
+    normal! '[V']
+    execute "normal \<Plug>(comment_toggle_linewise_visual)"
     normal! ']
   else
     echom "not line"
