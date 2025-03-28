@@ -11,7 +11,7 @@ function chooseAdb {
   elif [[ $(adbDeviceNames | wc -l) -eq 1  ]]; then
     device=$(adbDeviceNames)
   else
-    device=$(list-adb-names | fzy)
+    device=$(adbDeviceNames | fzy)
   fi
   echo $device
 }

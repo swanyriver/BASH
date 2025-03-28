@@ -23,6 +23,7 @@ fi
 source ~/BASH/_bash_functions
 source ~/BASH/_my_hg
 source ~/BASH/_autogit
+source ~/BASH/_my_vcs
 source ~/BASH/_fzf_opts_and_tmux_settings
 
 ####################

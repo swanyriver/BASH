@@ -138,3 +138,6 @@ set listchars=trail:·,precedes:«,extends:»,eol:↲,tab:▸\
 
 filetype plugin indent on
 syntax on
+
+" disable mouse
+set mouse=

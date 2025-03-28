@@ -16,3 +16,8 @@ if [ -d "$GOPATH/bin" ]; then
   export GOBIN=$GOPATH/bin
   export PATH=$PATH:$GOPATH/bin
 fi
+
+# Cargo bins
+if [ -d "$HOME/.cargo/bin" ]; then
+  export PATH=$PATH:$HOME/.cargo/bin
+fi
