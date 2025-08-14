@@ -28,7 +28,7 @@ function towernux {
 }
 
 # connect to xpra
-function attach {
+function x_attach {
 	numberOfArguments=$#
 	if [ $numberOfArguments -lt 1 ]; then
 		echo "must supply display number"
@@ -40,6 +40,10 @@ function attach {
           "ssh:${remoteHost}:${1}"
 }
 
+# https://github.com/wayland-transpositor/wprs
+function attach {
+  wprs ${remoteHost} attach 
+}
 
 #mosh replacements for ssh
 # TODO replace these with a paramatarized version

@@ -28,7 +28,15 @@ function tvim-all {
 
 function pipetotmux {
   tmux loadb -
-  tmux run 'tmux showb | xsel -i --clipboard'
+  tmux run 'tmux showb | wl-copy'
+}
+
+function vipemux {
+  tmux showb | vipe | pipetotmux
+}
+
+function tvipe {
+  vipemux
 }
 
 function teetotmux {
@@ -47,12 +55,12 @@ function pipefromtmux {
   tmux showb
 }
 
-# Set display used for clipboard-comm, :xpra or :1 for local
+# Set display used for clipboard-comm
 function tdisp {
   if [ $# -lt 1 ]; then
-    tmux show-env -g DISPLAY
+    tmux show-env -g WAYLAND_DISPLAY
   else
-    tmux set-env -g DISPLAY :${1}
+    tmux set-env -g WAYLAND_DISPLAY :${1}
   fi
 }
 

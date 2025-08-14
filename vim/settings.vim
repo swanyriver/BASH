@@ -141,3 +141,8 @@ syntax on
 
 " disable mouse
 set mouse=
+
+" started to be default after NVIM v0.10.4 
+" i just like the terminal colors better
+set notermguicolors
+

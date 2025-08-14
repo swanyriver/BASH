@@ -22,7 +22,7 @@ function towernux {
   ssh $remoteHost -t tmux new -s $1
 }
 
-function attach {
+function xpra_attach {
   numberOfArguments=$#
   if [ $numberOfArguments -lt 1 ]; then
     echo "must supply display number"
@@ -31,6 +31,10 @@ function attach {
   xpra attach \
     --ssh="ssh -q" \
     "ssh:${remoteHost}:${1}"
+}
+
+function attach {
+  wprs ${remoteHost} attach 
 }
 
 #mosh replacements for ssh
