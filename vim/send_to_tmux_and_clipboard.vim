@@ -1,8 +1,8 @@
 function! SendToTmuxAndClipboard(text)
   " Send to tmux
   let _ = system("tmux loadb <( echo -n " . shellescape(a:text) . ")")
-  " Send to clipboard using xsel and tmux DISPLAY settings
-  let _ = system("tmux run 'tmux showb | xsel -i --clipboard'")
+  " Send to clipboard using wl-copy and tmux WAYLAND_DISPLAY settings
+  let _ = system("tmux run 'tmux showb | wl-copy'")
   let l:line_count = trim(system("tmux showb | wc -l"))
   unsilent echo "attempted to send " . l:line_count . " lines to clipboard from tmux buffer"
 endfunction

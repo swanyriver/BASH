@@ -26,6 +26,7 @@ let g:signify_number_highlight = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""airline statusbar""""""""""""""""""""""""""""""""""""
 Plug 'vim-airline/vim-airline'
+let g:airline#extensions#whitespace#enabled = 0
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -126,7 +126,7 @@ ln -s $(which nvim) $HOME/BASH/PRE_PATH/vim
 :PlugInstall
 
 ###### nvim.treesitter
-:TSInstall bash python java cpp markdown go
+:TSInstall bash python java cpp markdown go lua kotlin vimdoc
 
 ##### nvim.cmp
 ## vim/nvimcmp_settings.lua ##

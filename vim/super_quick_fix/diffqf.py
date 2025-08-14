@@ -21,9 +21,9 @@ from itertools import zip_longest
 # printing hunk qf when new symbol encountered
 # keep print filename and line number until new file found
 
-diff_begining_re = re.compile("^diff --git a/\S* b/\S*")
-file_re = re.compile("^\+\+\+ b/(\S+)$")
-new_hunk_re = re.compile("^@@ -\d+[\,,\ ,\d]+\+(\d+)[\,,\ ,\d]+@@.*");
+diff_begining_re = re.compile(r"^diff --git a/\S* b/\S*")
+file_re = re.compile(r"^\+\+\+ b/(\S+)$")
+new_hunk_re = re.compile(r"^@@ -\d+[\,,\ ,\d]+\+(\d+)[\,,\ ,\d]+@@.*");
 
 def parsediff(lines):
   returns=[]

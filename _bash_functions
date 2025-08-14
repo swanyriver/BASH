@@ -174,12 +174,13 @@ function tmax {
 }
 
 function attach {
-  numberOfArguments=$#
-  if [ $numberOfArguments -lt 1 ]; then
-    echo "must supply DISPLAY num"
-    return
-  fi
-  xpra attach :${1}
+  # numberOfArguments=$#
+  # if [ $numberOfArguments -lt 1 ]; then
+  #   echo "must supply DISPLAY num"
+  #   return
+  # fi
+  # xpra attach :${1}
+  wprsc
 }
 
 function startxpra {

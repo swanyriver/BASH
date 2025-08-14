@@ -4,6 +4,7 @@
 require'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,
+    disable = { "markdown" },
     -- Run Treesiter + vim-syntax at the same time (like for indentation).
     additional_vim_regex_highlighting = true,
   },
