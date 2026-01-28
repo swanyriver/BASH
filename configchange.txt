@@ -1,5 +1,5 @@
 ######## tools
-sudo apt-get install ripgrep fd-find fzy fzf moreutils figlet mercurial xpra make build-essential vim bat git tmux
+sudo apt-get install wl-clipboard ripgrep fd-find fzy fzf moreutils figlet mercurial xpra make build-essential vim bat git tmux
 mkdir -p ~/BASH/PRE_PATH/
 ln -s $(which fdfind) ~/BASH/PRE_PATH/fd
 

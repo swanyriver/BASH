@@ -28,7 +28,7 @@ function tvim-all {
 
 function pipetotmux {
   tmux loadb -
-  tmux run 'tmux showb | wl-copy'
+  tmux run 'tmux showb | ~/BASH/clipboard_send_proxy.sh'
 }
 
 function vipemux {
